@@ -12,10 +12,10 @@ set_init <- function(experiment,genotype_names){
   w[grepl("KKRr",genotype_names)] <- 1
   w[grepl("KkRr",genotype_names)] <- 1
   w[grepl("kkRr",genotype_names)] <- 1
-  w[grepl("kkRR",genotype_names)] <- 0.87
+  w[grepl("kkRR",genotype_names)] <- 0.87 # set this by default for convenience
   
   names(w) <- genotype_names
-  #initial conditions differ by experiment. pindex 
+  #initial conditions differ by experiment. pindex defines which fitnesses to estimate.
   if (experiment == "DG4") {
     init[grepl("KKRR",genotype_names)] <- 2*eq
     pindex<-c(grep("KKRR",genotype_names),grep("KKRr",genotype_names),
@@ -85,7 +85,7 @@ simfunc_stoch <- function(input,rep=1){
   females[1,] <- input$init
   males[1,] <- input$init
   total <- females+males
-
+  
   lambda_base <- 6
   lambda <- rep(lambda_base,ngenos) #assume all genotypes produce same mean number of offspring
   
@@ -180,4 +180,25 @@ bootfit <- function(input){
   names(sol$par) <- genotype_names[input$pindex]
   paramfit <- transfrom(sol$par)
   paramfit
+}
+
+########## ggplot theme
+my_theme <- function(){
+  theme_foundation(base_size=14) + 
+    theme(
+      plot.title = element_text(face = "bold",size = rel(1.2), hjust = 0.5),
+      panel.background = element_rect(colour = NA),
+      plot.background = element_rect(colour = NA),
+      panel.border = element_rect(colour = NA),
+      panel.spacing=unit(1, "lines"),
+      axis.title = element_text(face = "bold"),
+      axis.title.y = element_text(vjust = 2),
+      axis.title.x = element_text(vjust = -0.2),
+      axis.line = element_line(colour="black"),
+      panel.grid.major = element_line(colour="#f0f0f0"),
+      panel.grid.minor = element_blank(),
+      plot.margin=unit(c(10,5,5,5),"mm"),
+      strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+      strip.text = element_text(face="bold")
+    )
 }
